@@ -9,53 +9,48 @@ import com.example.wishlist1.GroceryWishlist
 import com.example.wishlist1.R
 
 class MainActivity : AppCompatActivity() {
-   lateinit var adapter: GroceryWishlistAdapter
-    lateinit var items: MutableList<GroceryWishlist>
+   lateinit var items: MutableList<GroceryWishlist>
+   lateinit var groceryName: EditText
+   lateinit var groceryPrice: EditText
+   lateinit var groceryUrl: EditText
+   lateinit var submitButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialize RecyclerView and its adapter
-        val emailsRv = findViewById<RecyclerView>(R.id.grocery)
         items = mutableListOf()
-        adapter = GroceryWishlistAdapter(items)
+
+        // Initialize RecyclerView and its adapter
+        val groceryWishlistRv = findViewById<RecyclerView>(R.id.groceryList)
+        val groceryWishlistAdapter = GroceryWishlistAdapter(items)
 
         // Set the adapter and layout manager
-        emailsRv.adapter = adapter
-        emailsRv.layoutManager = LinearLayoutManager(this)
+        groceryWishlistRv.adapter = groceryWishlistAdapter
+        groceryWishlistRv.layoutManager = LinearLayoutManager(this)
 
-        val submitButton = findViewById<Button>(R.id.submitbutton)
+        val groceryName = findViewById<EditText>(R.id.groceryName)
+        val groceryPrice = findViewById<EditText>(R.id.groceryPrice)
+        val groceryUrl = findViewById<EditText>(R.id.groceryUrl)
+
+        val submitButton = findViewById<Button>(R.id.submitButton)
         submitButton.setOnClickListener {
-            GroceryWishlistItems()
+            var groceryItem: GroceryWishlist = GroceryWishlist(
+                groceryName.text.toString(),
+                groceryUrl.text.toString(),
+                groceryPrice.text.toString().toDouble()
+            )
+
+            items.add(groceryItem)
+            groceryWishlistAdapter.notifyDataSetChanged()
+
+            //Clear info
+            groceryName.text.clear()
+            groceryPrice.text.clear()
+            groceryUrl.text.clear()
         }
 
     }
-    private fun GroceryWishlistItems() {
-        val editName = findViewById<EditText>(R.id.editName)
-        val editPrice = findViewById<EditText>(R.id.editPrice)
-        val editUrl = findViewById<EditText>(R.id.editUrl)
-
-        val name = editName.text.toString()
-        val price = editPrice.text.toString()
-        val url = editUrl.text.toString()
-
-        if (name.isNotBlank() && price.isNotBlank() && url.isNotBlank()) {
-            val newItem = GroceryWishlist(name, price, url)
-            items.add(newItem)
-            adapter.notifyItemInserted(items.size - 1)
-
-            // Clear the input fields after adding the item
-            editName.text.clear()
-            editPrice.text.clear()
-            editUrl.text.clear()
-        } else {
-            // Handle empty input fields or any other validation logic here
-            // For example, you can show a toast message indicating the missing fields
-            Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()
-        }
-    }
-
 
 }
 

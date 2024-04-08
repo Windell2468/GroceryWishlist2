@@ -24,7 +24,7 @@ class GroceryWishlistAdapter(private val wishlist: List<GroceryWishlist>) :
     override fun onBindViewHolder(holder: WishlistViewHolder, position: Int) {
         val currentItem = wishlist[position]
         holder.nameTextView.text = currentItem.Name
-        holder.priceTextView.text = currentItem.Price
+        holder.priceTextView.text = currentItem.Price.toString()
         holder.urlTextView.text = currentItem.Url
     }
 
